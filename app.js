@@ -10,7 +10,9 @@ const app = express();
 
 const mongoose = require('mongoose');
 
-mongoose.connect('MONGO URL');
+mongoose.connect(
+  'mongodb+srv://admin:Blogapi0897@cluster0.qtjnp4j.mongodb.net/blog_api?retryWrites=true&w=majority&appName=Cluster0'
+);
 const db = mongoose.connection;
 db.on('error', console.error.bind(console, 'mongo connection error'));
 
