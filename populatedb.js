@@ -29,8 +29,8 @@ async function main() {
   await mongoose.connect(mongoDB);
   console.log('Debug: Should be connected?');
   await createUsers();
-  await createComments();
   await createPosts();
+  await createComments();
   console.log('Debug: Closing mongoose');
   mongoose.connection.close();
 }
