@@ -3,9 +3,9 @@ const Schema = mongoose.Schema;
 
 const CommentSchema = new Schema({
   content: { type: String, required: true },
-  date: { type: Date },
-  user: { type: Schema.Types.ObjectId, ref: 'User' },
-  post: { type: Schema.Types.ObjectId, ref: 'Post'}
+  date: { type: Date, required: true },
+  user: { type: Schema.Types.ObjectId, ref: 'User', required: true  },
+  post: { type: Schema.Types.ObjectId, ref: 'Post', required: true }
 });
 
 CommentSchema.virtual('url').get(function () {
