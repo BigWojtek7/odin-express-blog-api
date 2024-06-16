@@ -31,7 +31,6 @@ exports.user_create_post = [
       last_name: req.body.last_name,
       username: req.body.username,
       password: hashedPassword,
-      member_status: false,
       is_admin: req.body.is_admin === 'checked',
     });
     if (!errors.isEmpty()) {
@@ -41,7 +40,7 @@ exports.user_create_post = [
       });
     } else {
       await user.save();
-      res.redirect('/');
+      res.json('User created')
     }
   }),
 ];
