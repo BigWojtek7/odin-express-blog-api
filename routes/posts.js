@@ -26,3 +26,7 @@ router.get('/:postid/comments/:commentid', comment_controller.single_comment);
 // POST create post
 
 router.post('/', post_controller.post_create_post)
+
+// POST CREATE comment
+
+router.post('/:postid/comments', comment_controller.comment_create_post)
