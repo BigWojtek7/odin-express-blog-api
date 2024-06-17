@@ -5,16 +5,7 @@ const jsonwebtoken = require('jsonwebtoken');
 
 const User = require('../models/user');
 
-
 exports.user_create_post = [
-  body('first_name', 'First Name is required')
-    .trim()
-    .isLength({ min: 1 })
-    .escape(),
-  body('last_name', 'Last Name is required')
-    .trim()
-    .isLength({ min: 1 })
-    .escape(),
   body('username', 'Username is required').trim().isLength({ min: 1 }).escape(),
   body('password', 'Password is required').trim().isLength({ min: 1 }).escape(),
   body('re_password', 'Password does not match')
@@ -42,7 +33,7 @@ exports.user_create_post = [
   }),
 ];
 
-exports.user_login_post = asyncHandler(async (req, res, next) => {
+exports.user_login_post = asyncHandler(async (req, res) => {
   function issueJWT(user) {
     const _id = user._id;
 
@@ -55,7 +46,7 @@ exports.user_login_post = asyncHandler(async (req, res, next) => {
 
     const signedToken = jsonwebtoken.sign(payload, 'Secret', {
       expiresIn: expiresIn,
-      algorithm: 'RS256',
+      // algorithm: 'RS256',
     });
 
     return {
@@ -64,28 +55,26 @@ exports.user_login_post = asyncHandler(async (req, res, next) => {
     };
   }
 
-  await User.findOne({ username: req.body.username }, async (err, user) => {
-    if (err) {
-      return next(err);
-    }
-    if (!user) {
-      return res
-        .status(401)
-        .json({ success: false, msg: 'could not find user' });
-    }
-    const match = await bcrypt.compare(req.body.password, user.password);
+  const user = await User.findOne({ username: req.body.username }).exec()
 
-    if (match) {
-      const tokenObject = issueJWT(user);
-      res.status(200).json({
-        success: true,
-        token: tokenObject.token,
-        expiresIn: tokenObject.expires,
-      });
-    } else {
-      res
-        .status(401)
-        .json({ success: false, msg: 'you entered the wrong password' });
-    }
+  if (!user) {
+    return res
+      .status(401)
+      .json({ success: false, msg: 'could not find user' });
+  }
+
+  const match = await bcrypt.compare(req.body.password, user.password);
+
+  if (match) {
+    const tokenObject = issueJWT(user);
+    res.status(200).json({
+      success: true,
+      token: tokenObject.token,
+      expiresIn: tokenObject.expires,
+    });
+  } else {
+    res
+      .status(401)
+      .json({ success: false, msg: 'you entered the wrong password' });
+  }
   });
-});

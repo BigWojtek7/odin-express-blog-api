@@ -12,17 +12,16 @@ module.exports = (passport) => {
   passport.use(
     new JwtStrategy(options, async (jwt_payload, done) => {
       console.log(jwt_payload);
+      const user = await User.findById(jwt_payload.sub)
+        // if (err) {
+        //   return done(err, false);
+        // }
+      if (user) {
+        return done(null, user);
+      } else {
+        return done(null, false);
+      }
 
-      await User.findById(jwt_payload.sub, (err, user) => {
-        if (err) {
-          return done(err, false);
-        }
-        if (user) {
-          return done(null, user);
-        } else {
-          return done(null, false);
-        }
-      });
     })
   );
 };
