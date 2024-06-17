@@ -16,11 +16,16 @@ module.exports = (passport) => {
         // if (err) {
         //   return done(err, false);
         // }
-      if (user) {
+      try {
+        if (user) {
         return done(null, user);
       } else {
         return done(null, false);
       }
+      } catch(err){
+        return done(err, false)
+      }
+
 
     })
   );
