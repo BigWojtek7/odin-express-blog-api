@@ -33,7 +33,7 @@ exports.user_create_post = [
   }),
 ];
 
-exports.user_login_post = asyncHandler(async (req, res) => {
+exports.user_login_post = asyncHandler(async (req, res, next) => {
   function issueJWT(user) {
     const _id = user._id;
 
@@ -54,27 +54,30 @@ exports.user_login_post = asyncHandler(async (req, res) => {
       expires: expiresIn,
     };
   }
+  try {
+    const user = await User.findOne({ username: req.body.username }).exec();
 
-  const user = await User.findOne({ username: req.body.username }).exec()
-  
-  if (!user) {
-    return res
-      .status(401)
-      .json({ success: false, msg: 'could not find user' });
+    if (!user) {
+      return res
+        .status(401)
+        .json({ success: false, msg: 'could not find user' });
+    }
+
+    const match = await bcrypt.compare(req.body.password, user.password);
+
+    if (match) {
+      const tokenObject = issueJWT(user);
+      res.status(200).json({
+        success: true,
+        token: tokenObject.token,
+        expiresIn: tokenObject.expires,
+      });
+    } else {
+      res
+        .status(401)
+        .json({ success: false, msg: 'you entered the wrong password' });
+    }
+  } catch (err) {
+    next(err);
   }
-
-  const match = await bcrypt.compare(req.body.password, user.password);
-
-  if (match) {
-    const tokenObject = issueJWT(user);
-    res.status(200).json({
-      success: true,
-      token: tokenObject.token,
-      expiresIn: tokenObject.expires,
-    });
-  } else {
-    res
-      .status(401)
-      .json({ success: false, msg: 'you entered the wrong password' });
-  }
-  });
+});
