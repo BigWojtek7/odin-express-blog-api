@@ -43,8 +43,8 @@ exports.comment_delete = asyncHandler(async (req, res) => {
   //   Post.findById(req.params.id).exec(),
   //   Comment.findOneAndDelete({ post: req.params.id }).exec(),
   // ]);
-  await Comment.findByIdAndDelete(req.params.id)
-  res.json('Comment deleted')
+  await Comment.findByIdAndDelete(req.params.id);
+  res.json('Comment deleted');
 });
 
 exports.comment_edit = [

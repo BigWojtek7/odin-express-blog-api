@@ -53,9 +53,9 @@ exports.post_delete = asyncHandler(async (req, res) => {
   //   Post.findById(req.params.id).exec(),
   //   Comment.findOneAndDelete({ post: req.params.id }).exec(),
   // ]);
-  await Post.findByIdAndDelete(req.params.id)
-  await Comment.deleteMany({ post: req.params.id})
-  res.json('Post deleted')
+  await Post.findByIdAndDelete(req.params.id);
+  await Comment.deleteMany({ post: req.params.id });
+  res.json('Post deleted');
 });
 
 // edit post
@@ -80,9 +80,8 @@ exports.post_edit = [
     } else {
       // Data from form is valid.
 
-      
       await Post.findByIdAndUpdate(req.params.id, post, {});
-      
+
       res.json('Post edited');
     }
   }),
