@@ -9,7 +9,11 @@ const indexRouter = require('./routes/index');
 const usersRouter = require('./routes/users');
 const postsRouter = require('./routes/posts');
 
+const cors = require('cors')
+
 const app = express();
+
+app.use(cors())
 
 const mongoose = require('mongoose');
 
