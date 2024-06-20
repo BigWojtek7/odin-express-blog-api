@@ -12,4 +12,12 @@ CommentSchema.virtual('url').get(function () {
   return `${this._id}`;
 });
 
+CommentSchema.virtual('date_format').get(function () {
+  return this.date.toLocaleString('pl-PL');
+});
+
+CommentSchema.set('toJSON', {
+  virtuals: true,
+});
+
 module.exports = mongoose.model('Comment', CommentSchema);

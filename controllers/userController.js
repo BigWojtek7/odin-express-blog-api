@@ -2,8 +2,15 @@ const asyncHandler = require('express-async-handler');
 const { body, validationResult } = require('express-validator');
 const bcrypt = require('bcryptjs');
 const jsonwebtoken = require('jsonwebtoken');
+const { jwtDecode } = require('jwt-decode');
 
 const User = require('../models/user');
+
+exports.user_get = asyncHandler(async (req, res) => {
+  const userId = jwtDecode(req.headers.authorization).sub;
+  const user = await User.findById(userId, { username: 1, _id: 0 }).exec();
+  res.json(user);
+});
 
 exports.user_create_post = [
   body('username', 'Username is required').trim().isLength({ min: 1 }).escape(),
@@ -17,6 +24,7 @@ exports.user_create_post = [
   body('is_admin').escape(),
 
   asyncHandler(async (req, res) => {
+    console.log(req.body);
     const errors = validationResult(req);
     const hashedPassword = await bcrypt.hash(req.body.password, 10);
     const user = new User({
@@ -28,12 +36,13 @@ exports.user_create_post = [
       res.json({ success: false, msg: errors.array() });
     } else {
       await user.save();
-      res.json({ success: true, user: user });
+      res.redirect('/');
     }
   }),
 ];
 
 exports.user_login_post = asyncHandler(async (req, res, next) => {
+  console.log(req.body);
   function issueJWT(user) {
     const _id = user._id;
 

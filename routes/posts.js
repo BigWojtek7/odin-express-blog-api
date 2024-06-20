@@ -1,5 +1,6 @@
 const express = require('express');
 const router = express.Router();
+const passport = require('passport')
 
 const post_controller = require('../controllers/postController');
 const comment_controller = require('../controllers/commentController');
@@ -27,7 +28,7 @@ router.post('/', post_controller.post_create_post);
 
 // POST CREATE comment
 
-router.post('/:postid/comments', comment_controller.comment_create_post);
+router.post('/:postid/comments', passport.authenticate('jwt', { session: false }), comment_controller.comment_create_post);
 
 // EDIT post
 

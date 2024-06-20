@@ -1,12 +1,13 @@
 // const Post = require('../models/post')
 
 const Comment = require('../models/comment');
+const { jwtDecode }  = require('jwt-decode')
 
 const { body, validationResult } = require('express-validator');
 const asyncHandler = require('express-async-handler');
 
 exports.post_comments = asyncHandler(async (req, res) => {
-  const postComments = await Comment.find({ post: req.params.postid }).exec();
+  const postComments = await Comment.find({ post: req.params.postid }).populate('user', 'username').exec();
 
   res.json(postComments);
 });
@@ -20,13 +21,15 @@ exports.comment_create_post = [
   body('content', 'content is required').trim().isLength({ min: 1 }).escape(),
 
   asyncHandler(async (req, res) => {
+    const userId = jwtDecode(req.headers.authorization).sub
+
     const errors = validationResult(req);
 
     const comment = new Comment({
       content: req.body.content,
-      date: req.body.date,
-      user: req.body.user,
-      post: req.body.post,
+      date: new Date(),
+      user: userId,
+      post: req.params.postid,
     });
 
     if (!errors.isEmpty()) {
