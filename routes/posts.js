@@ -27,6 +27,7 @@ router.get('comments/:commentid', comment_controller.single_comment);
 router.post(
   '/',
   passport.authenticate('jwt', { session: false }),
+  admin.isAdmin,
   post_controller.post_create_post
 );
 
