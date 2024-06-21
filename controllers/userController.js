@@ -1,4 +1,3 @@
-require('dotenv').config();
 const asyncHandler = require('express-async-handler');
 const { body, validationResult } = require('express-validator');
 const bcrypt = require('bcryptjs');
@@ -59,8 +58,8 @@ exports.user_login_post = asyncHandler(async (req, res, next) => {
       admin: isAdmin,
       iat: Date.now(),
     };
-    const secret = process.env.JWT_SECRET
-    console.log(secret)
+    const secret = process.env.JWT_SECRET;
+    console.log(secret);
     const signedToken = jsonwebtoken.sign(payload, secret, {
       expiresIn: expiresIn,
       // algorithm: 'RS256',
