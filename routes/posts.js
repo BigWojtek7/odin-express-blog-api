@@ -1,11 +1,11 @@
 const express = require('express');
 const router = express.Router();
-const passport = require('passport')
+const passport = require('passport');
 
 const post_controller = require('../controllers/postController');
 const comment_controller = require('../controllers/commentController');
 // const user_controller = require('../controllers/userController');
-
+const admin = require('../config/admin');
 // GET all posts
 
 router.get('/', post_controller.all_posts);
@@ -20,15 +20,23 @@ router.get('/:postid/comments', comment_controller.post_comments);
 
 // GET single comment
 
-router.get('/:postid/comments/:commentid', comment_controller.single_comment);
+router.get('comments/:commentid', comment_controller.single_comment);
 
 // POST create post
 
-router.post('/', post_controller.post_create_post);
+router.post(
+  '/',
+  passport.authenticate('jwt', { session: false }),
+  post_controller.post_create_post
+);
 
 // POST CREATE comment
 
-router.post('/:postid/comments', passport.authenticate('jwt', { session: false }), comment_controller.comment_create_post);
+router.post(
+  '/:postid/comments',
+  passport.authenticate('jwt', { session: false }),
+  comment_controller.comment_create_post
+);
 
 // EDIT post
 
@@ -40,12 +48,19 @@ router.put('/:postid/comments/:commentid', comment_controller.comment_edit);
 
 // DELETE post
 
-router.delete('/:postid', post_controller.post_delete);
+router.delete(
+  '/:postid',
+  passport.authenticate('jwt', { session: false }),
+  admin.isAdmin,
+  post_controller.post_delete
+);
 
 // DELETE comment
 
 router.delete(
-  '/:postid/comments/:commentid',
+  '/comments/:commentid',
+  passport.authenticate('jwt', { session: false }),
+  admin.isAdmin,
   comment_controller.comment_delete
 );
 

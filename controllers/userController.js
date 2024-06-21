@@ -8,7 +8,11 @@ const User = require('../models/user');
 
 exports.user_get = asyncHandler(async (req, res) => {
   const userId = jwtDecode(req.headers.authorization).sub;
-  const user = await User.findById(userId, { username: 1, _id: 0 }).exec();
+  const user = await User.findById(userId, {
+    username: 1,
+    _id: 0,
+    is_admin: 1,
+  }).exec();
   res.json(user);
 });
 
@@ -30,7 +34,7 @@ exports.user_create_post = [
     const user = new User({
       username: req.body.username,
       password: hashedPassword,
-      is_admin: req.body.is_admin,
+      is_admin: false,
     });
     if (!errors.isEmpty()) {
       res.json({ success: false, msg: errors.array() });
@@ -45,11 +49,13 @@ exports.user_login_post = asyncHandler(async (req, res, next) => {
   console.log(req.body);
   function issueJWT(user) {
     const _id = user._id;
+    const isAdmin = user.is_admin;
 
     const expiresIn = '1d';
 
     const payload = {
       sub: _id,
+      admin: isAdmin,
       iat: Date.now(),
     };
 

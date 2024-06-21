@@ -1,5 +1,6 @@
 const Post = require('../models/post');
 const Comment = require('../models/comment');
+const { jwtDecode }  = require('jwt-decode')
 
 const asyncHandler = require('express-async-handler');
 
@@ -23,13 +24,14 @@ exports.post_create_post = [
   body('content', 'content is required').trim().isLength({ min: 1 }).escape(),
 
   asyncHandler(async (req, res) => {
+    const userId = jwtDecode(req.headers.authorization).sub
     const errors = validationResult(req);
 
     const post = new Post({
       title: req.body.title,
       content: req.body.content,
-      date: req.body.date,
-      user: req.body.user,
+      date: new Date(),
+      user: userId,
     });
 
     if (!errors.isEmpty()) {
@@ -53,8 +55,10 @@ exports.post_delete = asyncHandler(async (req, res) => {
   //   Post.findById(req.params.id).exec(),
   //   Comment.findOneAndDelete({ post: req.params.id }).exec(),
   // ]);
-  await Post.findByIdAndDelete(req.params.id);
-  await Comment.deleteMany({ post: req.params.id });
+  console.log(req.params.postid)
+  const post = await Post.findByIdAndDelete(req.params.postid);
+  const comment = await Comment.deleteMany({ post: req.params.postid });
+  console.log("1", post, "2", comment)
   res.json('Post deleted');
 });
 

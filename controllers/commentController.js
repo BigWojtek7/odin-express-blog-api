@@ -42,11 +42,12 @@ exports.comment_create_post = [
 ];
 
 exports.comment_delete = asyncHandler(async (req, res) => {
-  // const [post, allComments] = await Promise.all([
-  //   Post.findById(req.params.id).exec(),
-  //   Comment.findOneAndDelete({ post: req.params.id }).exec(),
-  // ]);
-  await Comment.findByIdAndDelete(req.params.id);
+  // const isAdmin = jwtDecode(req.headers.authorization).admin
+  // if(!isAdmin){
+  //   return res.status(401).send("Access denied. Not an admin");
+  // }
+
+  await Comment.findByIdAndDelete(req.params.commentid);
   res.json('Comment deleted');
 });
 
