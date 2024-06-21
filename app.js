@@ -9,17 +9,15 @@ const indexRouter = require('./routes/index');
 const usersRouter = require('./routes/users');
 const postsRouter = require('./routes/posts');
 
-const cors = require('cors')
+const cors = require('cors');
 
 const app = express();
 
-app.use(cors())
+app.use(cors());
 
 const mongoose = require('mongoose');
 
-mongoose.connect(
-  'mongodb+srv://admin:Blogapi0897@cluster0.qtjnp4j.mongodb.net/blog_api?retryWrites=true&w=majority&appName=Cluster0'
-);
+mongoose.connect(process.env.MONGO_DB);
 const db = mongoose.connection;
 db.on('error', console.error.bind(console, 'mongo connection error'));
 
