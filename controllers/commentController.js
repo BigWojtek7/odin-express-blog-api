@@ -42,11 +42,6 @@ exports.comment_create_post = [
 ];
 
 exports.comment_delete = asyncHandler(async (req, res) => {
-  // const isAdmin = jwtDecode(req.headers.authorization).admin
-  // if(!isAdmin){
-  //   return res.status(401).send("Access denied. Not an admin");
-  // }
-
   await Comment.findByIdAndDelete(req.params.commentid);
   res.json('Comment deleted');
 });

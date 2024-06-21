@@ -12,4 +12,12 @@ PostSchema.virtual('url').get(function () {
   return `${this._id}`;
 });
 
+PostSchema.virtual('date_format').get(function () {
+  return this.date.toLocaleDateString('pl-PL');
+});
+
+PostSchema.set('toJSON', {
+  virtuals: true,
+});
+
 module.exports = mongoose.model('Post', PostSchema);
