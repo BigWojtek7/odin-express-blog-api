@@ -1,5 +1,5 @@
 # Odin Project Blog Api
-[Live Preview](https://my-daily-blog.netlify.app/)
+[Live Preview](https://my-daily-blog.netlify.app/) </br>
 [Github React Repository](https://github.com/BigWojtek7/odin-react-blog-api)
 
 You can see post without log-in.
@@ -10,7 +10,7 @@ Account with admin permission:
 <details>
 <summary>Show code</summary>
 
-username: admin,
+username: admin</br>
 password: admin
 </details>
 
@@ -19,6 +19,6 @@ Regular user account without admin permission:
 <details>
 <summary>Show code</summary>
 
-username: user,
+username: user</br>
 password: user
 </details>
