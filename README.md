@@ -2,8 +2,9 @@
 [Live Preview](https://my-daily-blog.netlify.app/) </br>
 [Github React Repository](https://github.com/BigWojtek7/odin-react-blog-api)
 
-You can see post without log-in.
-A website where you have to log-in to leave comments
+
+A website where you have to log-in to leave comments.
+You can see posts without log-in.
 As a admin you can also delete posts & delete comments.
 
 Account with admin permission:
