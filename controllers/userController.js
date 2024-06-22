@@ -48,7 +48,7 @@ exports.user_create_post = [
       res.json({ success: false, msg: errors.array() });
     } else {
       await user.save();
-      res.redirect('/');
+      res.json({ success: true });
     }
   }),
 ];
