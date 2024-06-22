@@ -25,10 +25,17 @@ exports.user_create_post = [
     })
     .trim()
     .escape(),
-  body('is_admin').escape(),
 
   asyncHandler(async (req, res) => {
-    console.log(req.body);
+    const userInDatabase = await User.find({
+      username: req.body.username,
+    }).exec();
+
+    if (userInDatabase.length > 0) {
+      res.json({ success: false, msg: [{ msg: 'Username already exists' }] });
+      return;
+    }
+
     const errors = validationResult(req);
     const hashedPassword = await bcrypt.hash(req.body.password, 10);
     const user = new User({
@@ -36,6 +43,7 @@ exports.user_create_post = [
       password: hashedPassword,
       is_admin: false,
     });
+
     if (!errors.isEmpty()) {
       res.json({ success: false, msg: errors.array() });
     } else {
