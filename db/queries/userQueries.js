@@ -1,22 +1,29 @@
 const pool = require('../pool');
 
 async function getUsername(userId) {
-  const { rows } = await pool.query('SELECT username FROM users WHERE id=$1', [
-    userId,
-  ]);
+  const { rows } = await pool.query(
+    'SELECT username, is_admin FROM users WHERE id=$1',
+    [userId]
+  );
   return rows;
 }
 
-async function insertUser(username, password) {
-  await pool.query('INSERT INTO users (username, password) VALUES ($1, $2)', [
-    username,
-    password,
-  ]);
+async function insertUser(username, password, isAdmin) {
+  await pool.query(
+    'INSERT INTO users (username, password, is_admin) VALUES ($1, $2)',
+    [username, password, isAdmin]
+  );
 }
 
-async function getUser(username) {
+async function getUserByUsername(username) {
   const { rows } = await pool.query('SELECT * FROM users WHERE username=$1', [
     username,
+  ]);
+  return rows;
+}
+async function getUserById(userId) {
+  const { rows } = await pool.query('SELECT * FROM users WHERE id=$1', [
+    userId,
   ]);
   return rows;
 }
@@ -24,5 +31,6 @@ async function getUser(username) {
 module.exports = {
   getUsername,
   insertUser,
-  getUser,
+  getUserByUsername,
+  getUserById,
 };
