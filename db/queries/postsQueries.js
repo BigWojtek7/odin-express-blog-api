@@ -1,4 +1,4 @@
-const pool = require('./pool');
+const pool = require('../pool');
 
 async function getAllPosts() {
   const { rows } = await pool.query('SELECT * FROM posts');
