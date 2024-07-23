@@ -10,7 +10,7 @@ const { body, validationResult } = require('express-validator');
 exports.all_posts = asyncHandler(async (req, res) => {
   // const allPosts = await Post.find().populate('user').sort({ date: 1 }).exec();
   const allPosts = await dbPosts.getAllPosts();
-
+  console.log(allPosts);
   res.json(allPosts);
 });
 
@@ -45,9 +45,8 @@ exports.post_create_post = [
       const content = req.body.content;
       const date = new Date();
       const user = userId;
-
       await dbPosts.insertPost(title, content, date, user);
-      
+
       res.json('Post saved');
     }
   }),
@@ -61,8 +60,9 @@ exports.post_delete = asyncHandler(async (req, res) => {
   //   Comment.findOneAndDelete({ post: req.params.id }).exec(),
   // ]);
   const postId = req.params.postid;
-  const post = await dbPosts.deletePost(postId)
-  const comment = await dbComments.deleteAllPostsComments(postId)
+  const comment = await dbComments.deleteAllPostsComments(postId);
+  const post = await dbPosts.deletePost(postId);
+
   console.log('1', post, '2', comment);
   res.json('Post deleted');
 });

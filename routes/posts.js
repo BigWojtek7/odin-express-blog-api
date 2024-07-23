@@ -41,11 +41,11 @@ router.post(
 
 // EDIT post
 
-router.put('/:postid', post_controller.post_edit);
+// router.put('/:postid', post_controller.post_edit);
 
 // EDIT comment
 
-router.put('/:postid/comments/:commentid', comment_controller.comment_edit);
+// router.put('/:postid/comments/:commentid', comment_controller.comment_edit);
 
 // DELETE post
 

@@ -6,10 +6,11 @@ const bcrypt = require('bcryptjs');
 const jsonwebtoken = require('jsonwebtoken');
 const { jwtDecode } = require('jwt-decode');
 
-const User = require('../models/user');
+// const User = require('../models/user');
 
 exports.user_get = asyncHandler(async (req, res) => {
   const userId = jwtDecode(req.headers.authorization).sub;
+  console.log(userId)
   const user = await dbUser.getUsername(userId)
   res.json(user);
 });
@@ -25,11 +26,11 @@ exports.user_create_post = [
     .escape(),
 
   asyncHandler(async (req, res) => {
-    const userInDatabase = await User.find({
-      username: req.body.username,
-    }).exec();
+    console.log(req.body.username)
+    const reqUsername = req.body.username;
+    const userInDatabase = await dbUser.getUserByUsername(reqUsername);
 
-    if (userInDatabase.length > 0) {
+    if (userInDatabase?.username) {
       res.json({ success: false, msg: [{ msg: 'Username already exists' }] });
       return;
     }
@@ -54,13 +55,13 @@ exports.user_create_post = [
 exports.user_login_post = asyncHandler(async (req, res, next) => {
   console.log(req.body);
   function issueJWT(user) {
-    const _id = user._id;
+    const id = user.id;
     const isAdmin = user.is_admin;
 
     const expiresIn = '1d';
 
     const payload = {
-      sub: _id,
+      sub: id,
       admin: isAdmin,
       iat: Date.now(),
     };
@@ -79,11 +80,10 @@ exports.user_login_post = asyncHandler(async (req, res, next) => {
   try {
     const username = req.body.username;
     const user = await dbUser.getUserByUsername(username);
-
-    if (!user) {
+    if (!user?.username) {
       return res
         .status(401)
-        .json({ success: false, msg: 'could not find user' });
+        .json({ success: false, msg: 'could not find the user' });
     }
 
     const match = await bcrypt.compare(req.body.password, user.password);
