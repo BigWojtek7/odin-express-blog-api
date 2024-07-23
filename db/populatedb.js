@@ -13,22 +13,22 @@ CREATE TABLE IF NOT EXISTS users (
 
 CREATE TABLE IF NOT EXISTS posts (
   id INTEGER PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
-  users_id integer,
+  user_id integer,
   title VARCHAR ( 255 ),
   content VARCHAR ( 255 ),
   date TIMESTAMPTZ,
-  FOREIGN KEY (users_id) REFERENCES users(id)
+  FOREIGN KEY (user_id) REFERENCES users(id)
 );
 
 
 CREATE TABLE IF NOT EXISTS comments (
   id INTEGER PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
-  users_id integer,
-  posts_id integer,
+  user_id integer,
+  post_id integer,
   content VARCHAR ( 255 ),
   date TIMESTAMPTZ,
-  FOREIGN KEY (users_id) REFERENCES users(id),
-  FOREIGN KEY (posts_id) REFERENCES posts(id)
+  FOREIGN KEY (user_id) REFERENCES users(id),
+  FOREIGN KEY (post_id) REFERENCES posts(id)
 );
 `;
 
