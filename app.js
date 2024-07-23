@@ -15,11 +15,11 @@ const app = express();
 
 app.use(cors());
 
-const mongoose = require('mongoose');
+// const mongoose = require('mongoose');
 
-mongoose.connect(process.env.MONGO_DB);
-const db = mongoose.connection;
-db.on('error', console.error.bind(console, 'mongo connection error'));
+// mongoose.connect(process.env.MONGO_DB);
+// const db = mongoose.connection;
+// db.on('error', console.error.bind(console, 'mongo connection error'));
 
 require('./config/passport')(passport);
 

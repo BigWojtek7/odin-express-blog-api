@@ -1,4 +1,6 @@
 const asyncHandler = require('express-async-handler');
+
+const dbUser = require('../db/queries/userQueries')
 const { body, validationResult } = require('express-validator');
 const bcrypt = require('bcryptjs');
 const jsonwebtoken = require('jsonwebtoken');
@@ -8,11 +10,7 @@ const User = require('../models/user');
 
 exports.user_get = asyncHandler(async (req, res) => {
   const userId = jwtDecode(req.headers.authorization).sub;
-  const user = await User.findById(userId, {
-    username: 1,
-    _id: 0,
-    is_admin: 1,
-  }).exec();
+  const user = await dbUser.getUsername(userId)
   res.json(user);
 });
 
@@ -38,16 +36,16 @@ exports.user_create_post = [
 
     const errors = validationResult(req);
     const hashedPassword = await bcrypt.hash(req.body.password, 10);
-    const user = new User({
-      username: req.body.username,
-      password: hashedPassword,
-      is_admin: false,
-    });
+    
+    const username = req.body.username;
+    const password = hashedPassword;
+    const isAdmin = false;
+    
 
     if (!errors.isEmpty()) {
       res.json({ success: false, msg: errors.array() });
     } else {
-      await user.save();
+      await dbUser.insertUser(username, password, isAdmin)
       res.json({ success: true });
     }
   }),
@@ -79,7 +77,8 @@ exports.user_login_post = asyncHandler(async (req, res, next) => {
     };
   }
   try {
-    const user = await User.findOne({ username: req.body.username }).exec();
+    const username = req.body.username;
+    const user = await dbUser.getUserByUsername(username);
 
     if (!user) {
       return res
