@@ -6,7 +6,6 @@ const bcrypt = require('bcryptjs');
 const jsonwebtoken = require('jsonwebtoken');
 const { jwtDecode } = require('jwt-decode');
 
-// const User = require('../models/user');
 
 exports.user_get = asyncHandler(async (req, res) => {
   const userId = jwtDecode(req.headers.authorization).sub;

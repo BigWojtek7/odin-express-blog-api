@@ -39,15 +39,6 @@ router.post(
   comment_controller.comment_create_post
 );
 
-// EDIT post
-
-// router.put('/:postid', post_controller.post_edit);
-
-// EDIT comment
-
-// router.put('/:postid/comments/:commentid', comment_controller.comment_edit);
-
-// DELETE post
 
 router.delete(
   '/:postid',
