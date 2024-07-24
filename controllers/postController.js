@@ -22,8 +22,8 @@ exports.single_post = asyncHandler(async (req, res) => {
 // create post
 
 exports.post_create_post = [
-  body('title', 'title is required').trim().isLength({ min: 1 }).escape(),
-  body('content', 'content is required').trim().isLength({ min: 1 }).escape(),
+  body('title', 'title is required').trim().isLength({ min: 1 }),
+  body('content', 'content is required').trim().isLength({ min: 1 }),
 
   asyncHandler(async (req, res) => {
     const userId = jwtDecode(req.headers.authorization).sub;

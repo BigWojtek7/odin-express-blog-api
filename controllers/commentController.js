@@ -12,7 +12,7 @@ exports.post_comments = asyncHandler(async (req, res) => {
 });
 
 exports.comment_create_post = [
-  body('content', 'content is required').trim().isLength({ min: 1 }).escape(),
+  body('content', 'content is required').trim().isLength({ min: 1 }),
 
   asyncHandler(async (req, res) => {
     const userId = jwtDecode(req.headers.authorization).sub;

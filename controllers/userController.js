@@ -15,14 +15,13 @@ exports.user_get = asyncHandler(async (req, res) => {
 });
 
 exports.user_create_post = [
-  body('username', 'Username is required').trim().isLength({ min: 1 }).escape(),
-  body('password', 'Password is required').trim().isLength({ min: 1 }).escape(),
+  body('username', 'Username is required').trim().isLength({ min: 1 }),
+  body('password', 'Password is required').trim().isLength({ min: 1 }),
   body('re_password', 'Password does not match')
     .custom((value, { req }) => {
       return value === req.body.password;
     })
-    .trim()
-    .escape(),
+    .trim(),
 
   asyncHandler(async (req, res) => {
     console.log(req.body.username)

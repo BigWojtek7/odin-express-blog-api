@@ -11,7 +11,7 @@ async function getCommentsByPostId(postId) {
 
 async function insertComment(content, date, user, post) {
   await pool.query(
-    'INSERT INTO comments(content, date, user_id, post_id) VALUES($1, $2, $3, $4)',
+    `INSERT INTO comments(content, date, user_id, post_id) VALUES($1, $2, $3, $4)`,
     [content, date, user, post]
   );
 }

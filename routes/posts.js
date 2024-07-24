@@ -18,9 +18,6 @@ router.get('/:postid', post_controller.single_post);
 
 router.get('/:postid/comments', comment_controller.post_comments);
 
-// GET single comment
-
-router.get('comments/:commentid', comment_controller.single_comment);
 
 // POST create post
 
