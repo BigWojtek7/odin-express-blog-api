@@ -32,19 +32,6 @@ CREATE TABLE IF NOT EXISTS comments (
 );
 `;
 
-
-
-
-
-// const SQL2 =`CREATE TABLE IF NOT EXISTS post (
-//   id INTEGER PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
-//   user_id integer,
-//   title VARCHAR ( 255 ),
-//   content VARCHAR ( 255 ),
-//   date TIMESTAMPTZ,
-//   FOREIGN KEY (user_id) REFERENCES usernames(id)
-// );`
-
 async function main() {
   console.log('seeding...');
   const client = new Client({
