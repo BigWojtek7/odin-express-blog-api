@@ -9,10 +9,11 @@ async function getUsername(userId) {
 }
 
 async function insertUser(username, password, isAdmin) {
-  await pool.query(
-    'INSERT INTO users (username, password, is_admin) VALUES ($1, $2, $3)',
+  const { rows } = await pool.query(
+    'INSERT INTO users (username, password, is_admin) VALUES ($1, $2, $3) RETURNING *',
     [username, password, isAdmin]
   );
+  return rows[0];
 }
 
 async function getUserByUsername(username) {

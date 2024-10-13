@@ -9,7 +9,6 @@ const { body, validationResult } = require('express-validator');
 
 exports.all_posts = asyncHandler(async (req, res) => {
   const allPosts = await dbPosts.getAllPosts();
-  console.log(allPosts);
   res.json(allPosts);
 });
 
@@ -31,7 +30,7 @@ exports.post_create_post = [
 
     if (!errors.isEmpty()) {
       // There are errors. Render form again with sanitized values/errors messages.
-      return res.json(errors.array());
+      return res.json({ success: false, msg: errors.array() });
     } else {
       const title = req.body.title;
       const content = req.body.content;
@@ -39,7 +38,7 @@ exports.post_create_post = [
       const user = userId;
       await dbPosts.insertPost(title, content, date, user);
 
-      res.json('Post saved');
+      res.json({ success: true, msg: [{ msg: 'Post has been saved' }] });
     }
   }),
 ];
@@ -52,6 +51,5 @@ exports.post_delete = asyncHandler(async (req, res) => {
   const post = await dbPosts.deletePost(postId);
 
   console.log('1', post, '2', comment);
-  res.json('Post deleted');
+  res.json({ success: true, msg: 'Post has been deleted' });
 });
-

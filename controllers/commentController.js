@@ -20,15 +20,25 @@ exports.comment_create_post = [
     const errors = validationResult(req);
 
     if (!errors.isEmpty()) {
-      return res.json(errors.array());
+      return res.json({ success: false, msg: errors.array() });
     } else {
       const content = req.body.content;
       const date = new Date();
       const user = userId;
       const post = req.params.postid;
 
-      await dbComments.insertComment(content, date, user, post);
-      res.json('Comment saved');
+      const createComment = await dbComments.insertComment(
+        content,
+        date,
+        user,
+        post
+      );
+      // res.json(createComment);
+      res.json({
+        success: true,
+        msg: 'Comment has been saved',
+        data: createComment ,
+      });
     }
   }),
 ];
@@ -36,5 +46,5 @@ exports.comment_create_post = [
 exports.comment_delete = asyncHandler(async (req, res) => {
   const commentId = req.params.commentid;
   await dbComments.deleteComment(commentId);
-  res.json('Comment deleted');
+  res.json({ success: true, msg: 'Comment has been deleted' });
 });
