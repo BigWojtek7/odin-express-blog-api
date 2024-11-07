@@ -22,7 +22,7 @@ async function insertComment(content, date, user, post) {
       comments.post_id,
       comments.content,
       users.username, 
-      TO_CHAR(comments.date, 'DD-MM-YYYY HH24:MI:SS') as date_format
+      TO_CHAR(comments.date, 'DD-MM-YYYY HH24:MI') as date_format
     FROM comments
     JOIN users ON users.id = comments.user_id
     WHERE comments.id = $1`,
